@@ -32,8 +32,10 @@ def show_diary():
 def save_diary():
     title_receive = request.form.get("title_give")
     content_receive = request.form.get("content_give")
+
     today = datetime.now()
     mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+
     file = request.files["file_give"]
     extension = file.filename.split('.')[-1]
     filename = f'static/post-{mytime}.{extension}'
@@ -43,11 +45,14 @@ def save_diary():
     extension = profile.filename.split('.')[-1]
     profilename = f'static/profile-{mytime}.{extension}'
     profile.save(profilename)
+
+    time = today.strftime('%Y.%m.%d')
     doc = {
         'file': filename,
         'profile': profilename,
         'title': title_receive,
-        'content': content_receive
+        'content': content_receive,
+        'time': time
     }
     db.diary.insert_one(doc)
     return jsonify({'msg': 'complete!'})
